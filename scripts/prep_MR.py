@@ -112,7 +112,7 @@ def prep_GWAS_data(gwas_path,metabname,dataset,output_header,clumped_snps=None):
     N = metal.sort_values('N',ascending=False)['N'].to_list()[0]
     return(N)
 
-def prep_mQTL_data(metabname,dataset,mQTL_path,output_header,chrom_col,bp_col,se_col,af_col,P_col,N_col,ea_col,nea_col,isLogP=False,clumped_snps=None):
+def prep_mQTL_data(metabname,dataset,mQTL_path,output_header,chrom_col,bp_col,beta_col,se_col,af_col,P_col,N_col,ea_col,nea_col,isLogP=False,clumped_snps=None):
     gwas = pd.read_table(f'{output_header}_{metabname}_{dataset}_GWAS_harmonized.txt')
     mqtl = pd.read_table(mQTL_path)
 
@@ -131,8 +131,14 @@ def prep_mQTL_data(metabname,dataset,mQTL_path,output_header,chrom_col,bp_col,se
     mqtl2 = mqtl2.merge(rsid,left_on='SNP2',right_on='SNP')
 
     mqtl = pd.concat([mqtl1,mqtl2])
-
-    mqtl = mqtl[['Chrom',bp_col,'rsid',ea_col,nea_col,P_col,bp_col,se_col,af_col,N_col]]
+    if N_col not in mqtl.columns:
+        try:
+            N = float(N_col)
+            mqtl['N'] = N
+            N_col = 'N'
+        except:
+            raise customError(f'{N_col} not found in mQTL dataset')
+    mqtl = mqtl[['Chrom',bp_col,'rsid',ea_col,nea_col,P_col,beta_col,se_col,af_col,N_col]]
     if isLogP:
         mqtl[P_col] = 10**(-mqtl[P_col])
     if np.max(mqtl[af_col]>0.5):
@@ -186,6 +192,7 @@ def main():
     mr.add_argument("-o", "--output",dest = "output_header")
     mr.add_argument('-c','--chrom_col',dest='chrom_col',default=None)
     mr.add_argument('-b','--bp_col',dest='bp_col',default=None)
+    mr.add_argument('-be','-beta_col',dest='beta_col',default=None)
     mr.add_argument('-se','--se_col',dest='se_col',default=False)
     mr.add_argument('-pv','--P_col',dest='P_col',default=None)
     mr.add_argument('-ea','--ea_col',dest='ea_col',default=None)
@@ -204,7 +211,7 @@ def main():
     elif args.command == 'run_mr':
         print('Running MR')
         gwas_n = prep_GWAS_data(gwas_path=args.gwas_path,metabname=args.metabname,dataset=args.dataset,output_header=args.output_header,clumped_snps=args.clumped_snps)
-        mqtl_n = prep_mQTL_data(metabname=args.metabname,N_col=args.N_col,af_col=args.af_col,chrom_col=args.chrom_col,bp_col=args.bp_col,se_col=args.se_col,isLogP=args.isLogP,P_col=args.P_col,ea_col=args.ea_col,nea_col=args.nea_col,dataset=args.dataset,mQTL_path=args.mQTL_path,output_header=args.output_header,clumped_snps=args.clumped_snps)
+        mqtl_n = prep_mQTL_data(metabname=args.metabname,N_col=args.N_col,af_col=args.af_col,chrom_col=args.chrom_col,bp_col=args.bp_col,beta_col=args.beta_col,se_col=args.se_col,isLogP=args.isLogP,P_col=args.P_col,ea_col=args.ea_col,nea_col=args.nea_col,dataset=args.dataset,mQTL_path=args.mQTL_path,output_header=args.output_header,clumped_snps=args.clumped_snps)
         exp = args.exposure.upper()
         oc = args.outcome.upper()
         if exp == 'GWAS' and oc == 'MQTL':
