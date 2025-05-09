@@ -60,9 +60,9 @@ def run_clumping(sst,ref_path,exposure,chrom_col,bp_col,P_col,ea_col,nea_col,isL
     sst_df['CHR'] = sst_df['CHR'].astype(int)
     sst_df['BP'] = sst_df[bp_col]
     if isLogP:
-        sst_df['P'] = 10**-sst_df[logp_col]
+        sst_df['P'] = 10**-sst_df[P_col]
     else:
-        sst_df['P'] = sst_df[p_col]
+        sst_df['P'] = sst_df[P_col]
     sst_df['SNP1'] = sst_df['CHR'].astype(str)+':'+sst_df['BP'].astype(str)+':'+sst_df[ea_col].str.upper()+':'+sst_df[nea_col].str.upper()
     sst_df['SNP2'] = sst_df['CHR'].astype(str)+':'+sst_df['BP'].astype(str)+':'+sst_df[nea_col].str.upper()+':'+sst_df[ea_col].str.upper()
     sst_df1 = sst_df.copy()
