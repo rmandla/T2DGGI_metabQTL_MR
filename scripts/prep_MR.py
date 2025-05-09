@@ -1,12 +1,26 @@
 import pandas as pd
 import sys, subprocess, argparse, os
 
+class customError(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+
 def run_clumping(sst,ref_path,exposure,chrom_col,bp_col,P_col,ea_col,nea_col,isLogP=False,output_header='',dataset=None,plink='plink',snps=None,pthresh=5e-8,rsid_mappings=None):
     sst_df = pd.read_table(sst)
     if exposure.lower() == 'mqtl':
         if output_header != '':
             output_header += '.'
         output = f'{output_header}{exposure}.{dataset}'
+        if chrom_col == '':
+            raise customError('chromosome column name needs to be specified')
+        if bp_col == '':
+            raise customError('base pair column name needs to be specified')
+        if ea_col == '':
+            raise customError('effect allele column name needs to be specified')
+        if nea_col == '':
+            raise customError('non-effect allele column name needs to be specified')
+        if P_col == '':
+            raise customError('p-value column name needs to be specified')
     elif exposure.lower() == 'gwas':
         if output_header != '':
             output_header += '.'
@@ -143,11 +157,11 @@ def main():
     clump.add_argument('-pt','--p-thresh',dest='pthresh',default=5e-8)
     clump.add_argument('-snps','--snps',dest='snps',default=None)
     clump.add_argument('-rsids','--rsids',dest='rsid_mappings',default=None)
-    clump.add_argument('-c','--chrom_col',dest='chrom_col',default=None)
-    clump.add_argument('-b','--bp_col',dest='bp_col',default=None)
-    clump.add_argument('-pv','--P_col',dest='P_col',default=None)
-    clump.add_argument('-ea','--ea_col',dest='ea_col',default=None)
-    clump.add_argument('-nea','--nea_col',dest='nea_col',default=None)
+    clump.add_argument('-c','--chrom_col',dest='chrom_col',default='')
+    clump.add_argument('-b','--bp_col',dest='bp_col',default='')
+    clump.add_argument('-pv','--P_col',dest='P_col',default='')
+    clump.add_argument('-ea','--ea_col',dest='ea_col',default='')
+    clump.add_argument('-nea','--nea_col',dest='nea_col',default='')
     clump.add_argument('-isLogP','--isLogP',dest='isLogP',default=False)
 
     #parser.add_argument('-c','--compare',dest='compare')
