@@ -25,6 +25,16 @@ def run_clumping(sst,ref_path,exposure,chrom_col,bp_col,P_col,ea_col,nea_col,isL
         if output_header != '':
             output_header += '.'
         output = f'{output_header}{exposure}.T2DGGI'
+        if chrom_col == '':
+            chrom_col='CHR'
+        if bp_col == '':
+            bp_col='BP'
+        if ea_col == '':
+            ea_col='Allele1'
+        if nea_col == '':
+            nea_col='Alelle2'
+        if P_col == '':
+            P_col='P'
     else:
         raise(f'ERROR: {exposure} not recognized')
 
@@ -36,8 +46,8 @@ def run_clumping(sst,ref_path,exposure,chrom_col,bp_col,P_col,ea_col,nea_col,isL
         #    sst_df = sst_df[sst_df['rsids'].isin(snps_df[0])]
         elif type(rsid_mappings) == str:
             rsid_mappings_df = pd.read_table(rsid_mappings)
-            sst_df['SNP_ID1'] = sst_df[chrom_col].astype(str)+':'+sst_df[bp_col].astype(str)+':'+sst_df[a1_col]+':'+sst_df[a2_col]
-            sst_df['SNP_ID2'] = sst_df[chrom_col].astype(str)+':'+sst_df[bp_col].astype(str)+':'+sst_df[a2_col]+':'+sst_df[a1_col]
+            sst_df['SNP_ID1'] = sst_df[chrom_col].astype(str)+':'+sst_df[bp_col].astype(str)+':'+sst_df[ea_col]+':'+sst_df[nea_col]
+            sst_df['SNP_ID2'] = sst_df[chrom_col].astype(str)+':'+sst_df[bp_col].astype(str)+':'+sst_df[nea_col]+':'+sst_df[ea_col]
             temp_sst_df1 = sst_df.merge(rsid_mappings_df,left_on='SNP_ID1',right_on='SNP').drop(columns=['SNP_ID1'])
             temp_sst_df2 = sst_df.merge(rsid_mappings_df,left_on='SNP_ID2',right_on='SNP').drop(columns=['SNP_ID2'])
             sst_df = pd.concat([temp_sst_df1,temp_sst_df2])
@@ -53,8 +63,8 @@ def run_clumping(sst,ref_path,exposure,chrom_col,bp_col,P_col,ea_col,nea_col,isL
         sst_df['P'] = 10**-sst_df[logp_col]
     else:
         sst_df['P'] = sst_df[p_col]
-    sst_df['SNP1'] = sst_df['CHR'].astype(str)+':'+sst_df['BP'].astype(str)+':'+sst_df[a1_col].str.upper()+':'+sst_df[a2_col].str.upper()
-    sst_df['SNP2'] = sst_df['CHR'].astype(str)+':'+sst_df['BP'].astype(str)+':'+sst_df[a2_col].str.upper()+':'+sst_df[a1_col].str.upper()
+    sst_df['SNP1'] = sst_df['CHR'].astype(str)+':'+sst_df['BP'].astype(str)+':'+sst_df[ea_col].str.upper()+':'+sst_df[nea_col].str.upper()
+    sst_df['SNP2'] = sst_df['CHR'].astype(str)+':'+sst_df['BP'].astype(str)+':'+sst_df[nea_col].str.upper()+':'+sst_df[ea_col].str.upper()
     sst_df1 = sst_df.copy()
     sst_df1['SNP'] = sst_df1['SNP1']
     sst_df2 = sst_df.copy()
