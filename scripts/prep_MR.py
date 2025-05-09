@@ -75,7 +75,7 @@ def run_clumping(sst,ref_path,exposure,chrom_col,bp_col,P_col,ea_col,nea_col,isL
 def prep_GWAS_data(gwas_path,metabname,dataset,output_header,clumped_snps=None):
     metal = pd.read_table(gwas_path)
 
-    metal = metal[['CHR','Pos','RSID','Allele1','Allele2','P','Effect','StdErr','Freq1','N','MarkerName_HG38']]
+    metal = metal[['CHR','BP','RSID','Allele1','Allele2','P','Effect','StdErr','Freq1','N','MarkerName_HG38']]
     metal.columns = ['chr','pos','rsid','eAllele','oAllele','P','Effect','SE','AF','N','snpid']
     metal['eAllele'] = metal['eAllele'].str.upper()
     metal['oAllele'] = metal['oAllele'].str.upper()
@@ -173,7 +173,7 @@ def main():
     args = parser.parse_args()
     if args.isLogP != False:
         args.isLogP = True
-        
+
     if args.command == 'clump':
         print('Clumping variants')
         run_clumping(sst=args.sst,ref_path=args.ref_path,exposure=args.exposure,output_header=args.output_header,dataset=args.dataset,plink=args.plink_path,snps=args.snps,pthresh=float(args.pthresh),rsid_mappings=args.rsid_mappings)
