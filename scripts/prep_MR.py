@@ -32,7 +32,7 @@ def run_clumping(sst,ref_path,exposure,chrom_col,bp_col,P_col,ea_col,nea_col,isL
         if ea_col == '':
             ea_col='Allele1'
         if nea_col == '':
-            nea_col='Alelle2'
+            nea_col='Allele2'
         if P_col == '':
             P_col='P'
     else:
