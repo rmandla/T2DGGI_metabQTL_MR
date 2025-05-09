@@ -99,7 +99,7 @@ def run_clumping(sst,ref_path,exposure,chrom_col,bp_col,P_col,ea_col,nea_col,isL
 def prep_GWAS_data(gwas_path,metabname,dataset,output_header,clumped_snps=None):
     metal = pd.read_table(gwas_path)
 
-    metal = metal[['CHR','BP','RSID','Allele1','Allele2','P','Effect','StdErr','Freq1','N','MarkerName_HG38']]
+    metal = metal[['CHR','BP','RSID','Allele1','Allele2','P','Effect','StdErr','Freq1','N','MarkerName']]
     metal.columns = ['chr','pos','rsid','eAllele','oAllele','P','Effect','SE','AF','N','snpid']
     metal['eAllele'] = metal['eAllele'].str.upper()
     metal['oAllele'] = metal['oAllele'].str.upper()
