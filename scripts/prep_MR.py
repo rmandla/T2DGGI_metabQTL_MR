@@ -118,7 +118,7 @@ def prep_mQTL_data(metabname,dataset,mQTL_path,output_header,chrom_col,bp_col,be
 
     gwas['SNP'] = gwas['chr'].astype(str)+':'+gwas['pos'].astype(str)+':'+gwas['eAllele']+':'+gwas['oAllele']
     rsid = gwas[['rsid','SNP']]
-    mqtl['Chrom'] = mqtl[chrom_col].astype(str).str.split('chr',expand=True)[1]
+    mqtl['Chrom'] = mqtl[chrom_col].astype(str).str.replace('chr','')
     mqtl['SNP1'] = mqtl['Chrom']+':'+mqtl[bp_col].astype(str)+':'+mqtl[ea_col]+':'+mqtl[nea_col]
     mqtl['SNP2'] = mqtl['Chrom']+':'+mqtl[bp_col].astype(str)+':'+mqtl[nea_col]+':'+mqtl[ea_col]
 
