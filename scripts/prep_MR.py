@@ -208,7 +208,7 @@ def main():
 
     if args.command == 'clump':
         print('Clumping variants')
-        run_clumping(sst=args.sst,ref_path=args.ref_path,exposure=args.exposure,chrom_col=args.chrom_col,bp_col=args.bp_col,P_col=args.P_col,ea_col=args.ea_col,nea_col=args.nea_col,output_header=args.output_header,dataset=args.dataset,plink=args.plink_path,snps=args.snps,pthresh=float(args.pthresh),rsid_mappings=args.rsid_mappings)
+        run_clumping(sst=args.sst,ref_path=args.ref_path,exposure=args.exposure,chrom_col=args.chrom_col,bp_col=args.bp_col,P_col=args.P_col,ea_col=args.ea_col,isLogP=args.isLogP,nea_col=args.nea_col,output_header=args.output_header,dataset=args.dataset,plink=args.plink_path,snps=args.snps,pthresh=float(args.pthresh),rsid_mappings=args.rsid_mappings)
     elif args.command == 'run_mr':
         print('Running MR')
         gwas_n = prep_GWAS_data(gwas_path=args.gwas_path,metabname=args.metabname,dataset=args.dataset,output_header=args.output_header,clumped_snps=args.clumped_snps)
