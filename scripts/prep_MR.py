@@ -11,6 +11,7 @@ def run_clumping(sst,ref_path,exposure,chrom_col,bp_col,P_col,ea_col,nea_col,isL
     if exposure.lower() == 'mqtl':
         if output_header != '':
             output_header += '.'
+        exposure = 'mQTL'
         output = f'{output_header}{exposure}.{dataset}'
         if chrom_col == '':
             raise customError('chromosome column name needs to be specified')
@@ -25,6 +26,7 @@ def run_clumping(sst,ref_path,exposure,chrom_col,bp_col,P_col,ea_col,nea_col,isL
     elif exposure.lower() == 'gwas':
         if output_header != '':
             output_header += '.'
+        exposure = 'GWAS'
         output = f'{output_header}{exposure}.T2DGGI'
         if chrom_col == '':
             chrom_col='CHR'
