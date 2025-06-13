@@ -86,7 +86,7 @@ def run_clumping(sst,ref_path,exposure,chrom_col,bp_col,P_col,ea_col,nea_col,isL
         tsst_df = sst_df[sst_df['CHR']==chrom]
         tsst_df[['CHR','SNP','BP','P']].to_csv('temp_forclump.txt',sep='\t',index=None)
         ref_file = f'{ref_path}/EUR_1KG_chr{chrom}'
-        subprocess.run(f'{plink} --bfile {ref_file} --clump temp_forclump.txt --clump-p1 {pthresh} --clump-kb 10000 --clump-r2 0.001 --out {output}.chr{chrom}',shell=True,check=True)
+        subprocess.run(f'{plink} --bfile {ref_file} --no-sex --clump temp_forclump.txt --clump-p1 {pthresh} --clump-kb 10000 --clump-r2 0.001 --out {output}.chr{chrom}',shell=True,check=True)
 
         if f'{output_file}.chr{chrom}.clumped' in os.listdir(output_dir):
             output_files.append(f'{output_dir}{output_file}.chr{chrom}.clumped')
